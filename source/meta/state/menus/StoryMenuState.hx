@@ -58,7 +58,7 @@ class StoryMenuState extends MusicBeatState
 		transIn = FlxTransitionableState.defaultTransIn;
 		transOut = FlxTransitionableState.defaultTransOut;
 
-		#if !html5
+		#if desktop
 		Discord.changePresence('STORY MENU', 'Main Menu');
 		#end
 
@@ -191,7 +191,12 @@ class StoryMenuState extends MusicBeatState
 		// very unprofessional yoshubs!
 
 		updateText();
-	}
+	
+		#if android	
+		addVirtualPad(LEFT_FULL, A_B);	
+		#end	
+			
+	}		
 
 	override function update(elapsed:Float)
 	{

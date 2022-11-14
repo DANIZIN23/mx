@@ -75,7 +75,7 @@ class OptionsMenuState extends MusicBeatState
 				[
 					['preferences', callNewGroup],
 					['appearance', callNewGroup],
-					#if mobile ['mobile controls', openMobileControlmenu],#end
+					#if android ['android controls', openAndroidControlmenu],#end
 					['controls', openControlmenu],
 					['exit', exitMenu]
 				]
@@ -158,7 +158,7 @@ class OptionsMenuState extends MusicBeatState
 
 		//loadSubgroup('main');
 		
-		#if mobile
+		#if android
 		addVirtualPad(LEFT_FULL, A_B);
 		#end
 	}

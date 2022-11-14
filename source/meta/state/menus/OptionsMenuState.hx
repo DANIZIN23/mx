@@ -66,7 +66,7 @@ class OptionsMenuState extends MusicBeatState
 
 		// NOTE : Make sure to check Init.hx if you are trying to add options.
 
-		#if desktop
+		#if des
 		Discord.changePresence('OPTIONS MENU', 'Main Menu');
 		#end
 
@@ -159,7 +159,7 @@ class OptionsMenuState extends MusicBeatState
 		//loadSubgroup('main');
 	
          #if android
-		 addVirtualPad(UP_DOWN, A_B_C);
+		 addVirtualPad(LEFT_FULL, A_B_C);
 		 #end
     }
 
@@ -474,7 +474,17 @@ class OptionsMenuState extends MusicBeatState
 				}
 			}
 
-			if (enteringPipe)
+      #if android
+		if (virtualPad.buttonC.justPressed) {
+			#if android
+			removeVirtualPad();
+			#end	
+			Main.switchState(new android.AndroidControlsSubState());
+		}		
+		#end	
+			
+
+      if (enteringPipe)
 			{
 				marioY += (1 * 6) * 48 * elapsed;
 				mario.y = Std.int(marioY / 6) * 6;
@@ -728,16 +738,8 @@ class OptionsMenuState extends MusicBeatState
 		}
 	}
 
-       #if android
-		if (virtualPad.buttonC.justPressed) {
-			#if android
-			removeVirtualPad();
-			#end	
-			MusicBeatState.switchState(new android.AndroidControlsSubState());
-		}		
-		#end	
-	
-public function openControlmenu()
+
+	public function openControlmenu()
 	{
 		if (controls.ACCEPT)
 		{

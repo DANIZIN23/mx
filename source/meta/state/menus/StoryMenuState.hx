@@ -192,7 +192,7 @@ class StoryMenuState extends MusicBeatState
 
 		updateText();
 	
-		#if android	
+		#if mobile	
 		addVirtualPad(LEFT_FULL, A_B);	
 		#end	
 			

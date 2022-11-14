@@ -9,14 +9,12 @@ import meta.*;
 import meta.data.*;
 import meta.data.Conductor.BPMChangeEvent;
 import meta.data.dependency.FNFUIState;
-#if mobile
-import mobile.MobileControls;
-import mobile.flixel.FlxVirtualPad;
-import flixel.FlxCamera;
+#if android
+import android.AndroidControls;
+import android.flixel.FlxVirtualPad;
 import flixel.input.actions.FlxActionInput;
 import flixel.util.FlxDestroyUtil;
 #end
-import meta.state.PlayState;
 /* 
 	Music beat state happens to be the first thing on my list of things to add, it just so happens to be the backbone of
 	most of the project in its entirety. It handles a couple of functions that have to do with actual music and songs and such.
@@ -38,10 +36,9 @@ class MusicBeatState extends FNFUIState
 	inline function get_controls():Controls
 		return PlayerSettings.player1.controls;
 
-	#if mobile
-	var mobileControls:MobileControls;
+	#if android
 	var virtualPad:FlxVirtualPad;
-	var _pad:FlxVirtualPad;
+	var androidControls:AndroidControls;
 	var trackedinputsUI:Array<FlxActionInput> = [];
 	var trackedinputsNOTES:Array<FlxActionInput> = [];
 
@@ -58,63 +55,54 @@ class MusicBeatState extends FNFUIState
 	public function removeVirtualPad()
 	{
 		if (trackedinputsUI != [])
-			controls.removeControlsInput(trackedinputsUI);
+			controls.removeFlxInput(trackedinputsUI);
 
 		if (virtualPad != null)
 			remove(virtualPad);
 	}
 
-	public function addMobileControls(DefaultDrawTarget:Bool = true)
+	public function addAndroidControls()
 	{
-		mobileControls = new MobileControls();
+		androidControls = new AndroidControls();
 
-		switch (MobileControls.getMode())
+		switch (AndroidControls.getMode())
 		{
-			case 'Pad-Right' | 'Pad-Left' | 'Pad-Custom':
-				controls.setVirtualPadNOTES(mobileControls.virtualPad, RIGHT_FULL, NONE);
-			case 'Pad-Duo':
-				controls.setVirtualPadNOTES(mobileControls.virtualPad, BOTH_FULL, NONE);
-			case 'Hitbox':
-				controls.setHitBox(mobileControls.hitbox);
-			case 'Keyboard': // do nothing
+			case 0 | 1 | 2: // RIGHT_FULL | LEFT_FULL | CUSTOM
+				controls.setVirtualPadNOTES(androidControls.virtualPad, RIGHT_FULL, NONE);
+			case 3: // BOTH_FULL
+				controls.setVirtualPadNOTES(androidControls.virtualPad, BOTH_FULL, NONE);
+			case 4: // HITBOX
+				controls.setHitBox(androidControls.hitbox);
+			case 5: // KEYBOARD
 		}
 
 		trackedinputsNOTES = controls.trackedinputsNOTES;
 		controls.trackedinputsNOTES = [];
 
-		var camControls:FlxCamera = new FlxCamera();
-		FlxG.cameras.add(camControls, DefaultDrawTarget);
+		var camControls = new flixel.FlxCamera();
+		FlxG.cameras.add(camControls);
 		camControls.bgColor.alpha = 0;
 
-		mobileControls.cameras = [camControls];
-		mobileControls.visible = false;
-		add(mobileControls);
-		
-		if (PlayState.SONG.song.toLowerCase() == 'collision' && Init.trueMechanics[1])
-		{
-	        _pad = new FlxVirtualPad(NONE, A);
-		_pad.alpha = 0.75;
-		_pad.visible = false;
-		_pad.cameras = [camControls];
-		add(_pad);
-                }
+		androidControls.cameras = [camControls];
+		androidControls.visible = false;
+		add(androidControls);
 	}
 
-	public function removeMobileControls()
+	public function removeAndroidControls()
 	{
 		if (trackedinputsNOTES != [])
-			controls.removeControlsInput(trackedinputsNOTES);
+			controls.removeFlxInput(trackedinputsNOTES);
 
-		if (mobileControls != null)
-			remove(mobileControls);
+		if (androidControls != null)
+			remove(androidControls);
 	}
 
-	public function addPadCamera(DefaultDrawTarget:Bool = true)
+	public function addPadCamera()
 	{
 		if (virtualPad != null)
 		{
-			var camControls:FlxCamera = new FlxCamera();
-			FlxG.cameras.add(camControls, DefaultDrawTarget);
+			var camControls = new flixel.FlxCamera();
+			FlxG.cameras.add(camControls);
 			camControls.bgColor.alpha = 0;
 			virtualPad.cameras = [camControls];
 		}
@@ -123,31 +111,30 @@ class MusicBeatState extends FNFUIState
 
 	override function destroy()
 	{
-		#if mobile
+		#if android
 		if (trackedinputsNOTES != [])
-			controls.removeControlsInput(trackedinputsNOTES);
+			controls.removeFlxInput(trackedinputsNOTES);
 
 		if (trackedinputsUI != [])
-			controls.removeControlsInput(trackedinputsUI);
+			controls.removeFlxInput(trackedinputsUI);
 		#end
 
 		super.destroy();
 
-		#if mobile
+		#if android
 		if (virtualPad != null)
 		{
 			virtualPad = FlxDestroyUtil.destroy(virtualPad);
 			virtualPad = null;
 		}
 
-		if (mobileControls != null)
+		if (androidControls != null)
 		{
-			mobileControls = FlxDestroyUtil.destroy(mobileControls);
-			mobileControls = null;
+			androidControls = FlxDestroyUtil.destroy(androidControls);
+			androidControls = null;
 		}
 		#end
 	}
-
 	// class create event
 	override function create()
 	{
@@ -236,7 +223,7 @@ class MusicBeatSubState extends FlxSubState
 	inline function get_controls():Controls
 		return PlayerSettings.player1.controls;
 
-	#if mobile
+	#if android
 	var virtualPad:FlxVirtualPad;
 	var trackedinputsUI:Array<FlxActionInput> = [];
 
@@ -253,18 +240,18 @@ class MusicBeatSubState extends FlxSubState
 	public function removeVirtualPad()
 	{
 		if (trackedinputsUI != [])
-			controls.removeControlsInput(trackedinputsUI);
+			controls.removeFlxInput(trackedinputsUI);
 
 		if (virtualPad != null)
 			remove(virtualPad);
 	}
 
-	public function addPadCamera(DefaultDrawTarget:Bool = true)
+	public function addPadCamera()
 	{
 		if (virtualPad != null)
 		{
-			var camControls:FlxCamera = new FlxCamera();
-			FlxG.cameras.add(camControls, DefaultDrawTarget);
+			var camControls = new flixel.FlxCamera();
+			FlxG.cameras.add(camControls);
 			camControls.bgColor.alpha = 0;
 			virtualPad.cameras = [camControls];
 		}
@@ -273,14 +260,14 @@ class MusicBeatSubState extends FlxSubState
 
 	override function destroy()
 	{
-		#if mobile
+		#if android
 		if (trackedinputsUI != [])
-			controls.removeControlsInput(trackedinputsUI);
+			controls.removeFlxInput(trackedinputsUI);
 		#end
 
 		super.destroy();
 
-		#if mobile
+		#if android
 		if (virtualPad != null)
 		{
 			virtualPad = FlxDestroyUtil.destroy(virtualPad);
@@ -288,7 +275,6 @@ class MusicBeatSubState extends FlxSubState
 		}
 		#end
 	}
-
 	override function update(elapsed:Float)
 	{
 		// everyStep();

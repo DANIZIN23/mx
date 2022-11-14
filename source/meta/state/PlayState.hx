@@ -45,7 +45,7 @@ import flixel.addons.plugin.screengrab.FlxScreenGrab;
 
 using StringTools;
 
-#if !html5
+#if desktop
 import meta.data.dependency.Discord;
 #end
 
@@ -288,6 +288,11 @@ class PlayState extends MusicBeatState
 		allUIs.push(camHUD);
 		FlxCamera.defaultCameras = [camGame];
 
+		#if mobile
+		addmobileControls();
+		mobileControls.visible = true;
+		#end
+		
 		// default song
 		if (SONG == null)
 			SONG = Song.loadFromJson('test', 'test');
@@ -507,6 +512,7 @@ class PlayState extends MusicBeatState
 
 		add(camFollow);
 
+		
 		if (boyfriend.curCharacter != "luigi-player" && boyfriend.curCharacter != "bf-camera")
 			powerupVisuals(boyfriend.animation.name);
 		if (bfPrefix == 'bf-water')
@@ -2057,7 +2063,7 @@ class PlayState extends MusicBeatState
 
 	public static function updateRPC(pausedRPC:Bool)
 	{
-		#if !html5
+		#if desktop
 		var displayRPC:String = (pausedRPC) ? detailsPausedText : songDetails.toUpperCase();
 
 		if (health > 0 && gbHealth > 0)
@@ -3215,11 +3221,11 @@ class PlayState extends MusicBeatState
 
 	function callTextbox() {
 		var dialogPath = Paths.json(SONG.song.toLowerCase() + '/dialogue');
-		if (sys.FileSystem.exists(dialogPath))
+		if (Assets.exists(dialogPath))
 		{
 			startedCountdown = false;
 
-			dialogueBox = DialogueBox.createDialogue(sys.io.File.getContent(dialogPath));
+			dialogueBox = DialogueBox.createDialogue(Assets.getText(dialogPath));
 			dialogueBox.cameras = [dialogueHUD];
 			dialogueBox.whenDaFinish = startCountdown;
 

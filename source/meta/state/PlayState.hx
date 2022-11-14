@@ -288,9 +288,9 @@ class PlayState extends MusicBeatState
 		allUIs.push(camHUD);
 		FlxCamera.defaultCameras = [camGame];
 
-		#if mobile
-		addmobileControls();
-		mobileControls.visible = true;
+		#if android
+		addAndroidControls();
+		androidControls.visible = true;
 		#end
 		
 		// default song

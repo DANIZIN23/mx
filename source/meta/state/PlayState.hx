@@ -2454,11 +2454,11 @@ class PlayState extends MusicBeatState
 			powerupVisuals("idle");
 		}
 
-		songMusic = new FlxSound().loadEmbedded(Sound.fromFile('./' + Paths.inst(SONG.song)), false, true);
+		songMusic = new FlxSound().loadEmbedded(Paths.inst(SONG.song), false, true);
 		songMusic.volume = 0.75;
 
 		if (SONG.needsVoices)
-			vocals = new FlxSound().loadEmbedded(Sound.fromFile('./' + Paths.voices(SONG.song)), false, true);
+			vocals = new FlxSound().loadEmbedded(Paths.voices(SONG.song), false, true);
 		else
 			vocals = new FlxSound();
 		vocals.volume = 0.75;
@@ -2472,6 +2472,7 @@ class PlayState extends MusicBeatState
 
 		// load external charts
 		// stole from shubs i am tird
+		#if windows
 		var existingCharts = CoolUtil.returnAssetsLibrary('external', 'assets/songs/' + SONG.song);
 		trace(existingCharts);
 

@@ -66,7 +66,7 @@ class OptionsMenuState extends MusicBeatState
 
 		// NOTE : Make sure to check Init.hx if you are trying to add options.
 
-		#if des
+		#if desktop
 		Discord.changePresence('OPTIONS MENU', 'Main Menu');
 		#end
 
@@ -158,7 +158,7 @@ class OptionsMenuState extends MusicBeatState
 
 		//loadSubgroup('main');
 	
-         #if android
+                 #if android
 		 addVirtualPad(LEFT_FULL, A_B_C);
 		 #end
     }

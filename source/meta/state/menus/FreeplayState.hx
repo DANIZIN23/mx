@@ -213,7 +213,7 @@ class FreeplayState extends MusicBeatState
 		selector.text = ">";
 		// add(selector);
 	
-	#if android
+	#if mobile
 	addVirtualPad(LEFT_FULL, A_B);
 	#end
 	}

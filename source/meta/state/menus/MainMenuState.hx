@@ -204,7 +204,7 @@ class MainMenuState extends MusicBeatState
 		version.antialiasing = false;
 		add(version);
 
-		#if android
+		#if mobile
 		addVirtualPad(UP_DOWN, A_B);
 		#end	
 		

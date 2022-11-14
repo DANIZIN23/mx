@@ -2472,7 +2472,7 @@ class PlayState extends MusicBeatState
 
 		// load external charts
 		// stole from shubs i am tird
-		#if windows
+		
 		var existingCharts = CoolUtil.returnAssetsLibrary('external', 'assets/songs/' + SONG.song);
 		trace(existingCharts);
 

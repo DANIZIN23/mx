@@ -9,6 +9,7 @@ import meta.CoolUtil;
 import openfl.utils.AssetType;
 import openfl.utils.Assets as OpenFlAssets;
 import sys.FileSystem;
+import openfl.utils.Assets;
 import sys.io.File;
 
 class Paths
@@ -152,7 +153,7 @@ class Paths
 			song = 'first-level';
 		}
 		var voicePath = 'songs/${song.toLowerCase()}/Voices.$SOUND_EXT';
-		if (!FileSystem.exists(getPath(voicePath, MUSIC, null)))
+		if (!Assets.exists(getPath(voicePath, MUSIC, null)))
 		{
 			voicePath = 'songs/${CoolUtil.swapSpaceDash(song.toLowerCase())}/Voices.$SOUND_EXT';
 		}
@@ -166,7 +167,7 @@ class Paths
 			song = 'first-level';
 		}
 		var instPath = 'songs/${song.toLowerCase()}/Inst.$SOUND_EXT';
-		if (!FileSystem.exists(getPath(instPath, MUSIC, null)))
+		if (!Assets.exists(getPath(instPath, MUSIC, null)))
 		{
 			instPath = 'songs/${CoolUtil.swapSpaceDash(song.toLowerCase())}/Inst.$SOUND_EXT';
 		}
@@ -185,7 +186,7 @@ class Paths
 
 	inline static public function getSparrowAtlas(key:String, ?library:String)
 	{
-		return (FlxAtlasFrames.fromSparrow(image(key, library), File.getContent(file('images/$key.xml', library))));
+		return (FlxAtlasFrames.fromSparrow(image(key, library), Assets.getText(file('images/$key.xml', library))));
 	}
 
 	inline static public function getPackerAtlas(key:String, ?library:String)

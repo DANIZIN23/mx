@@ -21,6 +21,7 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
+import openfl.utils.Assets;
 import lime.app.Application;
 import meta.MusicBeat.MusicBeatState;
 import meta.data.*;
@@ -137,7 +138,7 @@ class CutsceneState extends MusicBeatState
 		}
 
 		var layer1Json = Paths.file('images/cutscene/' + sceneNum + '/layer1.json');
-		var layer1Data = haxe.Json.parse(sys.io.File.getContent(layer1Json));
+		var layer1Data = haxe.Json.parse(Assets.getText(layer1Json));
 
 		var layer1FramesData = getFrameIndexesExpanded(layer1Data.frames);
 		layer1 = new FlxSprite();
@@ -182,7 +183,7 @@ class CutsceneState extends MusicBeatState
 		}
 
 		var layer3Json = Paths.file('images/cutscene/' + sceneNum + '/layer3.json');
-		var layer3Data = haxe.Json.parse(sys.io.File.getContent(layer3Json));
+		var layer3Data = haxe.Json.parse(Assets.getText(layer3Json));
 
 		var layer3FramesData = getFrameIndexesExpanded(layer3Data.frames);
 		layer3 = new FlxSprite();

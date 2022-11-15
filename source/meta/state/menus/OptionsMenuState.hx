@@ -769,8 +769,8 @@ class OptionsMenuState extends MusicBeatState
 			{
 				Main.switchState(this, new AndroidControlsMenu());
 				lockedMovement = false;
-			}
-                        #end
+			
+                        
 		
 	
 

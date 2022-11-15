@@ -16,7 +16,6 @@ import meta.data.dependency.Discord;
 import meta.data.dependency.FNFSprite;
 import meta.data.font.Alphabet;
 import meta.subState.OptionsSubstate;
-import android.AndroidControlsMenu;
 
 /**
 	Options menu rewrite because I'm unhappy with how it was done previously
@@ -67,7 +66,7 @@ class OptionsMenuState extends MusicBeatState
 
 		// NOTE : Make sure to check Init.hx if you are trying to add options.
 
-		#if desktop
+		#if des
 		Discord.changePresence('OPTIONS MENU', 'Main Menu');
 		#end
 
@@ -76,9 +75,10 @@ class OptionsMenuState extends MusicBeatState
 				[
 					['preferences', callNewGroup],
 					['appearance', callNewGroup],
-					['controls', openControlmenu],
-					['android controls', androidControlsMenu],
+					
+                    ['controls', openControlmenu],
 					['exit', exitMenu]
+				]
 			],
 			'preferences' => [
 				[
@@ -119,13 +119,13 @@ class OptionsMenuState extends MusicBeatState
 					['Opaque Holds', getFromOption],
 				]
 			]
-		]
+		];
 
-		// for (category in categoryMap.keys)
-		
-			// categoryMap.get(category)[1] = returnSubgroup(category);
-			// categoryMap.get(category)[2] = returnExtrasMap(categoryMap.get(category)[1]);
-		
+		for (category in categoryMap.keys())
+		{
+			categoryMap.get(category)[1] = returnSubgroup(category);
+			categoryMap.get(category)[2] = returnExtrasMap(categoryMap.get(category)[1]);
+		}
 
 		// background
 		bg = new FlxSprite();
@@ -144,7 +144,7 @@ class OptionsMenuState extends MusicBeatState
 		bg2.visible = false;
 		add(bg2);
 
-		warpText = new FlxText((38 * 6), (20 * 6), 0, 'WELCOME TO\nWARP ZONE!', 8);
+		warpText = new FlxText((38 * 6), (20 * 6), 0, '\nWARP ZONE', 8);
 		warpText.scrollFactor.set();
 		warpText.setFormat(Paths.font("smb1.ttf"), 8, FlxColor.WHITE, CENTER);
 		warpText.setGraphicSize(Std.int(warpText.width * 6));
@@ -157,11 +157,11 @@ class OptionsMenuState extends MusicBeatState
 		loadPipes();
 
 		//loadSubgroup('main');
-
-                #if android
-	        addVirtualPad(FULL, A_B_C);
-                #end
-	}
+	
+         #if android
+		 addVirtualPad(LEFT_FULL, A_B_C);
+		 #end
+    }
 
 	private var currentAttachmentMap:Map<FlxText, Dynamic>;
 
@@ -335,9 +335,9 @@ class OptionsMenuState extends MusicBeatState
 		// set the correct group stuffs lol
 		for (i in 0...activeSubgroup.length)
 		{
-			activeSubgroup.members[i].color = 0xE69C21;
+			activeSubgroup.members[i].color = 0xC8913E;
 			if (currentAttachmentMap != null)
-				setAttachmentColor(currentAttachmentMap.get(activeSubgroup.members[i]), 0xE69C21);
+				setAttachmentColor(currentAttachmentMap.get(activeSubgroup.members[i]), 0xC8913E);
 
 			// check for null members and hardcode the dividers
 			if (categoryMap.get(curCategory)[0][i][1] == null) {
@@ -474,7 +474,17 @@ class OptionsMenuState extends MusicBeatState
 				}
 			}
 
-			if (enteringPipe)
+      #if android
+		if (virtualPad.buttonC.justPressed) {
+			#if android
+			removeVirtualPad();
+			#end	
+			Main.switchState(new android.AndroidControlsSubState());
+		}		
+		#end	
+			
+
+      if (enteringPipe)
 			{
 				marioY += (1 * 6) * 48 * elapsed;
 				mario.y = Std.int(marioY / 6) * 6;
@@ -512,17 +522,21 @@ class OptionsMenuState extends MusicBeatState
 							mario.animation.frameIndex = 2;
 							if (pressesLeft <= 0)
 							{
-								var songName = "Wrong-Warp";
+								var black = new FlxSprite();
+								black.makeGraphic(1280, 1280, FlxColor.BLACK);
+								add(black);
+
+								var songName = "Game-Over";
 								var curDifficulty = 1;
 								var poop:String = Highscore.formatSong(songName);
-				
+
 								PlayState.SONG = Song.loadFromJson(poop, songName);
 								PlayState.isStoryMode = false;
 								PlayState.storyDifficulty = curDifficulty;
-				
+
 								PlayState.storyWeek = 0;
 								trace('CUR WEEK' + PlayState.storyWeek);
-				
+
 								if (FlxG.sound.music != null)
 									FlxG.sound.music.stop();
 								
@@ -724,6 +738,7 @@ class OptionsMenuState extends MusicBeatState
 		}
 	}
 
+
 	public function openControlmenu()
 	{
 		if (controls.ACCEPT)
@@ -748,23 +763,6 @@ class OptionsMenuState extends MusicBeatState
 			FlxFlicker.flicker(activeSubgroup.members[curSelection], 0.5, 0.06 * 2, true, false, function(flick:FlxFlicker)
 			{
 				Main.switchState(this, new MainMenuState());
-				lockedMovement = false;
-			});
-		}
-		//
-	}
-}
-
-	public function androidControlsMenu()
-	{
-		//
-		if (controls.ACCEPT)
-		{
-			FlxG.sound.play(Paths.sound('confirmMenu'));
-			lockedMovement = true;
-			FlxFlicker.flicker(activeSubgroup.members[curSelection], 0.5, 0.06 * 2, true, false, function(flick:FlxFlicker)
-			{
-				Main.switchState(this, new AndroidControlsMenu());
 				lockedMovement = false;
 			});
 		}

@@ -15,6 +15,7 @@ import meta.data.*;
 import meta.data.dependency.FNFSprite;
 import meta.data.font.Alphabet;
 import meta.subState.OptionsSubstate;
+import android.AndroidControlsMenu;
 
 /**
 	Options menu rewrite because I'm unhappy with how it was done previously
@@ -757,9 +758,9 @@ class OptionsMenuState extends MusicBeatState
 	}
 }
 
-public function androidControlsMenu()
+    public function androidControlsMenu()
 	{
-		//
+		
 		if (controls.ACCEPT)
 		{
 			FlxG.sound.play(Paths.sound('confirmMenu'));
@@ -768,8 +769,8 @@ public function androidControlsMenu()
 			{
 				Main.switchState(this, new AndroidControlsMenu());
 				lockedMovement = false;
-			});
+			}
 		}
-		//
+		
 	}
 }

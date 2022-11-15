@@ -15,6 +15,7 @@ import meta.data.*;
 import meta.data.dependency.FNFSprite;
 import meta.data.font.Alphabet;
 import meta.subState.OptionsSubstate;
+import android.AndroidControlsMenu;
 
 /**
 	Options menu rewrite because I'm unhappy with how it was done previously
@@ -436,7 +437,7 @@ class OptionsMenuState extends MusicBeatState
 		}
 
 		#if android
-		if (_virtualpad.buttonC.justPressed) {
+		if (virtualpad.buttonC.justPressed) {
 			Main.switchState(this, new android.AndroidControlsMenu());
 		}
 		#end

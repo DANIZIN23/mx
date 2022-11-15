@@ -14,7 +14,7 @@ import meta.MusicBeat.MusicBeatState;
 import meta.data.*;
 import meta.data.dependency.FNFSprite;
 import meta.data.font.Alphabet;
-import meta.SubState.AndroidMenuSubstate;
+
 import meta.subState.OptionsSubstate;
 
 /**
@@ -441,7 +441,7 @@ class OptionsMenuState extends MusicBeatState
 			#if android
 			removeVirtualPad();
 			#end	
-			Main.switchState(new android.AndroidControlsMenuSubstate());
+			Main.switchState(new android.OptionsSubstate());
 		}
 		#end
 

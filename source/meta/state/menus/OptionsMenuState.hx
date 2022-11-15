@@ -756,3 +756,20 @@ class OptionsMenuState extends MusicBeatState
 		}
 	}
 }
+
+public function androidControlsMenu()
+	{
+		//
+		if (controls.ACCEPT)
+		{
+			FlxG.sound.play(Paths.sound('confirmMenu'));
+			lockedMovement = true;
+			FlxFlicker.flicker(activeSubgroup.members[curSelection], 0.5, 0.06 * 2, true, false, function(flick:FlxFlicker)
+			{
+				Main.switchState(this, new AndroidControlsMenu());
+				lockedMovement = false;
+			});
+		}
+		//
+	}
+}

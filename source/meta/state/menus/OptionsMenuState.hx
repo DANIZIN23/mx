@@ -67,7 +67,7 @@ class OptionsMenuState extends MusicBeatState
 
 		// NOTE : Make sure to check Init.hx if you are trying to add options.
 
-		#if !html5
+		#if desktop
 		Discord.changePresence('OPTIONS MENU', 'Main Menu');
 		#end
 
@@ -122,10 +122,10 @@ class OptionsMenuState extends MusicBeatState
 		]
 
 		// for (category in categoryMap.keys)
-		{
+		
 			categoryMap.get(category)[1] = returnSubgroup(category);
 			categoryMap.get(category)[2] = returnExtrasMap(categoryMap.get(category)[1]);
-		}
+		
 
 		// background
 		bg = new FlxSprite();

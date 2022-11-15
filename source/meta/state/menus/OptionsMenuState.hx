@@ -66,7 +66,7 @@ class OptionsMenuState extends MusicBeatState
 
 		// NOTE : Make sure to check Init.hx if you are trying to add options.
 
-		#if !html5
+		#if desktop
 		Discord.changePresence('OPTIONS MENU', 'Main Menu');
 		#end
 
@@ -82,7 +82,8 @@ class OptionsMenuState extends MusicBeatState
 			'preferences' => [
 				[
 					['Downscroll', getFromOption],
-					['Centered Notefield', getFromOption],
+					#if android ['android controls', openAndroidControlmenu],#end
+                    ['Centered Notefield', getFromOption],
 					['Ghost Tapping', getFromOption],
 					['Quant Notes', getFromOption],
 					['Photosensitivity', getFromOption],
@@ -723,6 +724,26 @@ class OptionsMenuState extends MusicBeatState
 		}
 	}
 
+
+#if android
+	public function openAndroidControlmenu()
+	{
+		if (controls.ACCEPT)
+		{
+			FlxG.sound.play(Paths.sound('confirmMenu'));
+			lockedMovement = true;
+			FlxFlicker.flicker(activeSubgroup.members[curSelection], 0.5, 0.06 * 2, true, false, function(flick:FlxFlicker)
+			{
+
+				#if android
+				removeVirtualPad();
+				#end
+				openSubState(new android.AndroidControlsSubState());
+				lockedMovement = false;
+			});
+		}
+	}
+	#end		
 	public function openControlmenu()
 	{
 		if (controls.ACCEPT)

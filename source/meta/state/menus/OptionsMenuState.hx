@@ -119,7 +119,7 @@ class OptionsMenuState extends MusicBeatState
 					['Opaque Holds', getFromOption],
 				]
 			]
-		];
+		]
 
 		for (category in categoryMap.keys())
 		{

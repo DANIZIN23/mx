@@ -121,7 +121,7 @@ class OptionsMenuState extends MusicBeatState
 			]
 		]
 
-		for (category in categoryMap.keys())
+		for (category in categoryMap.keys());
 		{
 			categoryMap.get(category)[1] = returnSubgroup(category);
 			categoryMap.get(category)[2] = returnExtrasMap(categoryMap.get(category)[1]);
@@ -159,7 +159,7 @@ class OptionsMenuState extends MusicBeatState
 		//loadSubgroup('main');
 
                 #if android
-	        addVirtualPad(FULL, A_B);
+	        addVirtualPad(FULL, A_B_C);
                 #end
 	}
 

@@ -12,10 +12,10 @@ import gameObjects.userInterface.menu.Checkmark;
 import gameObjects.userInterface.menu.Selector;
 import meta.MusicBeat.MusicBeatState;
 import meta.data.*;
+import meta.data.dependency.Discord;
 import meta.data.dependency.FNFSprite;
 import meta.data.font.Alphabet;
 import meta.subState.OptionsSubstate;
-import android.AndroidControlsMenu;
 
 /**
 	Options menu rewrite because I'm unhappy with how it was done previously
@@ -65,6 +65,10 @@ class OptionsMenuState extends MusicBeatState
 		 */
 
 		// NOTE : Make sure to check Init.hx if you are trying to add options.
+
+		#if !html5
+		Discord.changePresence('OPTIONS MENU', 'Main Menu');
+		#end
 
 		categoryMap = [
 			'main' => [
@@ -219,10 +223,6 @@ class OptionsMenuState extends MusicBeatState
 		bg2.visible = false;
 
 		selectPipe(0);
-
-		#if android
-		addVirtualPad(LEFT_FULL, A_B_C);
-		#end
 	}
 
 	function loadPrefs()
@@ -436,12 +436,6 @@ class OptionsMenuState extends MusicBeatState
 			}
 		}
 
-		#if android
-		if (_virtualpad.buttonC.justPressed) {
-			Main.switchState(this, new android.AndroidControlsMenu());
-		}
-		#end
-
 		var leftP = controls.LEFT_P;
 		var rightP = controls.RIGHT_P;
 		var upP = controls.UP_P;
@@ -449,6 +443,7 @@ class OptionsMenuState extends MusicBeatState
 
 		if (isPipes)
 		{
+
 			if (!lockedMovement)
 			{
 				if (leftP)
@@ -752,22 +747,6 @@ class OptionsMenuState extends MusicBeatState
 			FlxFlicker.flicker(activeSubgroup.members[curSelection], 0.5, 0.06 * 2, true, false, function(flick:FlxFlicker)
 			{
 				Main.switchState(this, new MainMenuState());
-				lockedMovement = false;
-			});
-		}
-	}
-}
-
-public function androidControlsMenu()
-	{
-		//
-		if (controls.ACCEPT)
-		{
-			FlxG.sound.play(Paths.sound('confirmMenu'));
-			lockedMovement = true;
-			FlxFlicker.flicker(activeSubgroup.members[curSelection], 0.5, 0.06 * 2, true, false, function(flick:FlxFlicker)
-			{
-				Main.switchState(this, new AndroidControlsMenu());
 				lockedMovement = false;
 			});
 		}

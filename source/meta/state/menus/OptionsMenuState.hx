@@ -121,7 +121,7 @@ class OptionsMenuState extends MusicBeatState
 			]
 		]
 
-		for (category in categoryMap.keys)
+		// for (category in categoryMap.keys)
 		{
 			categoryMap.get(category)[1] = returnSubgroup(category);
 			categoryMap.get(category)[2] = returnExtrasMap(categoryMap.get(category)[1]);

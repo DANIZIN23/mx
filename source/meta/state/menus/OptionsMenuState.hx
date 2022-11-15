@@ -441,7 +441,7 @@ class OptionsMenuState extends MusicBeatState
 			#if android
 			removeVirtualPad();
 			#end	
-			Main.switchState(new android.OptionsSubstate());
+			Main.switchState(new AndroidControlMenu());
 		}
 		#end
 

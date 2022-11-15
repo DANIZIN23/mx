@@ -12,10 +12,10 @@ import gameObjects.userInterface.menu.Checkmark;
 import gameObjects.userInterface.menu.Selector;
 import meta.MusicBeat.MusicBeatState;
 import meta.data.*;
+import meta.data.dependency.Discord;
 import meta.data.dependency.FNFSprite;
 import meta.data.font.Alphabet;
 import meta.subState.OptionsSubstate;
-import android.AndroidControlsMenu;
 
 /**
 	Options menu rewrite because I'm unhappy with how it was done previously
@@ -66,12 +66,17 @@ class OptionsMenuState extends MusicBeatState
 
 		// NOTE : Make sure to check Init.hx if you are trying to add options.
 
+		#if windows
+		Discord.changePresence('OPTIONS MENU', 'Main Menu');
+		#end
+
 		categoryMap = [
 			'main' => [
 				[
 					['preferences', callNewGroup],
 					['appearance', callNewGroup],
 					['controls', openControlmenu],
+					
 					['exit', exitMenu]
 				]
 			],
@@ -139,7 +144,7 @@ class OptionsMenuState extends MusicBeatState
 		bg2.visible = false;
 		add(bg2);
 
-		warpText = new FlxText((38 * 6), (20 * 6), 0, '\nWARP ZONE', 8);
+		warpText = new FlxText((38 * 6), (20 * 6), 0, 'WELCOME TO\nWARP ZONE!', 8);
 		warpText.scrollFactor.set();
 		warpText.setFormat(Paths.font("smb1.ttf"), 8, FlxColor.WHITE, CENTER);
 		warpText.setGraphicSize(Std.int(warpText.width * 6));
@@ -152,6 +157,10 @@ class OptionsMenuState extends MusicBeatState
 		loadPipes();
 
 		//loadSubgroup('main');
+		
+		#if android
+		addVirtualPad(FULL, A_B_C);
+		#end
 	}
 
 	private var currentAttachmentMap:Map<FlxText, Dynamic>;
@@ -219,10 +228,6 @@ class OptionsMenuState extends MusicBeatState
 		bg2.visible = false;
 
 		selectPipe(0);
-
-		#if android
-		addVirtualPad(LEFT_FULL, A_B_C);
-		#end
 	}
 
 	function loadPrefs()
@@ -330,9 +335,9 @@ class OptionsMenuState extends MusicBeatState
 		// set the correct group stuffs lol
 		for (i in 0...activeSubgroup.length)
 		{
-			activeSubgroup.members[i].color = 0xC8913E;
+			activeSubgroup.members[i].color = 0xE69C21;
 			if (currentAttachmentMap != null)
-				setAttachmentColor(currentAttachmentMap.get(activeSubgroup.members[i]), 0xC8913E);
+				setAttachmentColor(currentAttachmentMap.get(activeSubgroup.members[i]), 0xE69C21);
 
 			// check for null members and hardcode the dividers
 			if (categoryMap.get(curCategory)[0][i][1] == null) {
@@ -436,12 +441,6 @@ class OptionsMenuState extends MusicBeatState
 			}
 		}
 
-		#if android
-		if (VirtualPad.buttonC.justPressed) {
-			Main.switchState(this, new android.AndroidControlsMenu());
-		}
-		#end
-
 		var leftP = controls.LEFT_P;
 		var rightP = controls.RIGHT_P;
 		var upP = controls.UP_P;
@@ -449,6 +448,7 @@ class OptionsMenuState extends MusicBeatState
 
 		if (isPipes)
 		{
+
 			if (!lockedMovement)
 			{
 				if (leftP)
@@ -512,21 +512,17 @@ class OptionsMenuState extends MusicBeatState
 							mario.animation.frameIndex = 2;
 							if (pressesLeft <= 0)
 							{
-								var black = new FlxSprite();
-								black.makeGraphic(1280, 1280, FlxColor.BLACK);
-								add(black);
-
-								var songName = "Game-Over";
+								var songName = "Wrong-Warp";
 								var curDifficulty = 1;
 								var poop:String = Highscore.formatSong(songName);
-
+				
 								PlayState.SONG = Song.loadFromJson(poop, songName);
 								PlayState.isStoryMode = false;
 								PlayState.storyDifficulty = curDifficulty;
-
+				
 								PlayState.storyWeek = 0;
 								trace('CUR WEEK' + PlayState.storyWeek);
-
+				
 								if (FlxG.sound.music != null)
 									FlxG.sound.music.stop();
 								
@@ -671,6 +667,7 @@ class OptionsMenuState extends MusicBeatState
 						selector.selectorPlay('left');
 					if (!controls.RIGHT)
 						selector.selectorPlay('right');
+		
 
 					if (controls.RIGHT_P)
 						updateSelector(selector, 1);
@@ -741,7 +738,9 @@ class OptionsMenuState extends MusicBeatState
 			});
 		}
 	}
-
+			
+          
+		
 	public function exitMenu()
 	{
 		//
@@ -755,5 +754,6 @@ class OptionsMenuState extends MusicBeatState
 				lockedMovement = false;
 			});
 		}
+		//
 	}
 }
